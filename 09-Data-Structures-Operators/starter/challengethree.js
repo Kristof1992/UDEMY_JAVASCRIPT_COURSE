@@ -87,6 +87,8 @@ console.log([...question.values()]);
 
 console.log('\n');
 
+// Challenge 3
+
 const gameEvents = new Map([
   [17, 'GOAL'],
   [36, 'Substitution'],
