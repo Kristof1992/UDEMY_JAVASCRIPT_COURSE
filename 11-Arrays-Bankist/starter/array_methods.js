@@ -74,3 +74,37 @@ const currencies = new Map([
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 /////////////////////////////////////////////////
+
+let arr = ['a', 'b', 'c', 'd', 'e'];
+
+/**
+ * @param start - The beginning index of the specified portion of the array. If start is undefined, then the slice begins at index 0.
+ * @param end - The end index of the specified portion of the array. This is exclusive of the element at the index 'end'.
+ *              If end is undefined, then the slice extends to the end of the array.
+ */
+// SLICE - Doesn't mutate the Array
+console.log(arr.slice(2)); // 2 onwards c d e
+console.log(arr.slice(2, 4)); // 2 to 4 excluding 4 since 4-2 = 2 elements
+console.log(arr.slice(-2)); // d e
+console.log(arr.slice(-1)); // e
+console.log(arr.slice(1, -1)); // b c d
+console.log(arr.slice(1, -2)); // b c
+console.log(arr.slice(-2));
+
+// SPLICE  - Mutates the Array
+// console.log(arr.splice(2));
+arr.splice(-1);
+arr.splice(1, 2);
+console.log(arr);
+
+// REVERSE - Mutates the Array
+const arr1 = ['a', 'b', 'c', 'd', 'e'];
+const arr2 = ['j', 'i', 'h', 'g', 'j'];
+console.log(arr2.reverse());
+
+// CONCAT - Doesn't mutate
+const letters = arr1.concat(arr2);
+console.log(letters);
+
+// JOIN
+console.log(letters.join('-'));
