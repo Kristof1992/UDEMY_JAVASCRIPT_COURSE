@@ -91,5 +91,19 @@ const displayMovements = function (movements) {
 
 displayMovements(account1.movements);
 
+const createUsernames = function (accs) {
+  accs.forEach((acc) => {
+    acc.username = acc.owner
+      .toLowerCase()
+      .split(' ')
+      .map((el) => el[0])
+      .join('');
+  });
+};
+createUsernames(accounts);
+console.log(accounts);
+
+// console.log(getInitials);
+
 // Shows all HTML Elements within the Parent Element
-console.log(containerMovements.innerHTML);
+// console.log(containerMovements.innerHTML);
