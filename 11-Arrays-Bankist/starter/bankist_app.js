@@ -112,6 +112,29 @@ const calcDisplayBalance = function (movements) {
 
 calcDisplayBalance(account1.movements);
 
+const calcDisplaySummary = function (movements) {
+  const incomes = movements
+    .filter((mov) => mov > 0)
+    .reduce((acc, mov) => acc + mov, 0);
+  labelSumIn.textContent = `${incomes}€`;
+  const spending = movements
+    .filter((mov) => mov < 0)
+    .reduce((acc, mov) => acc + mov, 0);
+  labelSumOut.textContent = `${Math.abs(spending)}€`;
+
+  // Bank pays interest for each deposit made (1.2% of deposited amount)
+  const interest = movements
+    .filter((mov) => mov > 0)
+    .map((deposit) => deposit * (1.2 / 100))
+    .filter((int, i, arr) => int >= 1)
+    .reduce((acc, interest, i, arr) => {
+      return acc + interest;
+    }, 0);
+  labelSumInterest.textContent = `${interest}€`;
+};
+
+calcDisplaySummary(account1.movements);
+
 // console.log(getInitials);
 
 // Shows all HTML Elements within the Parent Element
