@@ -75,9 +75,12 @@ const currencies = new Map([
 
 /////////////////////////////////////////////////
 
-const displayMovements = function (movements) {
+const displayMovements = function (movements, sort = false) {
   containerMovements.innerHTML = '';
-  movements.forEach((mov, i) => {
+
+  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+
+  movs.forEach((mov, i) => {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
     const html = `<div class="movements__row">
           <div class="movements__type movements__type--${type}">${
@@ -213,6 +216,14 @@ btnClose.addEventListener('click', function (e) {
   inputCloseUsername.value = inputClosePin.value = '';
 });
 
+let sorted = false;
+btnSort.addEventListener('click', function (e) {
+  e.preventDefault();
+
+  displayMovements(currentAccount.movements, !sorted);
+  sorted = !sorted;
+});
+
 // SOME METHOD
 const anyDeposits = movements.some((mov) => mov > 1500);
 
@@ -254,3 +265,22 @@ const overallBalanceThree = accounts
   .flatMap((acc) => acc.movements)
   .reduce((acc, mov) => acc + mov, 0);
 console.log(overallBalanceThree);
+
+// Strings
+const owners = ['Jonas', 'Zack', 'Adam', 'Martha'];
+console.log(owners.sort());
+console.log(owners);
+
+// Numbers
+const copyA = [...movements];
+const copyB = [...movements];
+const ascending = copyA.sort((a, b) => {
+  return a - b;
+});
+
+const descending = copyB.sort((a, b) => {
+  return b - a;
+});
+
+console.log(copyA);
+console.log(copyB);
