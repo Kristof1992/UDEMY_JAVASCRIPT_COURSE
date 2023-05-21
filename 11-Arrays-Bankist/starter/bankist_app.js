@@ -20,7 +20,7 @@ const account2 = {
 };
 
 const account3 = {
-  owner: 'Steven T Wh',
+  owner: 'Steven Thomas Williams',
   movements: [200, -200, 340, -300, -20, 50, 400, -460],
   interestRate: 0.7,
   pin: 3333,
@@ -61,6 +61,8 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
@@ -70,8 +72,6 @@ const currencies = new Map([
   ['EUR', 'Euro'],
   ['GBP', 'Pound sterling'],
 ]);
-
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 
 /////////////////////////////////////////////////
 
@@ -166,7 +166,7 @@ btnTransfer.addEventListener('click', function (e) {
   const receiverAcc = accounts.find(
     (acc) => acc.username === inputTransferTo.value
   );
-  console.log(amount, receiverAcc);
+  inputTransferAmount.value = inputTransferTo.value = '';
 
   if (
     amount > 0 &&
