@@ -49,7 +49,27 @@ const account2 = {
   locale: 'en-US',
 };
 
-const accounts = [account1, account2];
+const account3 = {
+  owner: 'Tomáš Bruško',
+  movements: [3000, 1400, -650, -790, -3210, -7000, 18500, -30],
+  interestRate: 1.3,
+  pin: 3333,
+
+  movementsDates: [
+    '2022-04-01T13:15:33.035Z',
+    '2022-04-30T09:48:16.867Z',
+    '2022-04-25T06:04:23.907Z',
+    '2022-04-25T14:18:46.235Z',
+    '2023-05-05T16:33:06.386Z',
+    '2023-05-10T14:43:26.374Z',
+    '2023-05-23T18:49:59.371Z',
+    '2023-05-24T12:01:20.894Z',
+  ],
+  currency: 'EUR',
+  locale: 'sk-SK',
+};
+
+const accounts = [account1, account2, account3];
 
 /////////////////////////////////////////////////
 // Elements
@@ -81,7 +101,7 @@ const inputClosePin = document.querySelector('.form__input--pin');
 /////////////////////////////////////////////////
 // Functions
 
-const formatMovementDate = function (date) {
+const formatMovementDate = function (date, locale) {
   const calcDaysPassed = (date1, date2) =>
     Math.round(Math.abs(date2 - date1) / (1000 * 60 * 60 * 24));
 
@@ -90,10 +110,13 @@ const formatMovementDate = function (date) {
   if (daysPassed === 0) return 'Today';
   if (daysPassed === 1) return 'Yesterday';
   if (daysPassed <= 7) return `${daysPassed} days ago`;
-  const day = `${date.getDate()}`.padStart(2, '0');
-  const month = `${date.getMonth() + 1}`.padStart(2, '0');
-  const year = date.getFullYear();
-  return `${day}/${month}/${year}`;
+
+  // const day = `${date.getDate()}`.padStart(2, '0');
+  // const month = `${date.getMonth() + 1}`.padStart(2, '0');
+  // const year = date.getFullYear();
+
+  // return `${day}/${month}/${year}`;
+  return new Intl.DateTimeFormat(locale).format(date);
 };
 
 const displayMovements = function (acc, sort = false) {
@@ -107,7 +130,7 @@ const displayMovements = function (acc, sort = false) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
 
     const date = new Date(acc.movementsDates[i]);
-    const displayDate = formatMovementDate(date);
+    const displayDate = formatMovementDate(date, acc.locale);
     const html = `
       <div class="movements__row">
         <div class="movements__type movements__type--${type}">${
@@ -199,14 +222,32 @@ btnLogin.addEventListener('click', function (e) {
     containerApp.style.opacity = 100;
 
     // Create current date and time
-    const now = new Date();
-    const day = `${now.getDate()}`.padStart(2, '0');
-    const month = `${now.getMonth() + 1}`.padStart(2, '0');
-    const year = now.getFullYear();
-    const hour = `${now.getHours()}`.padStart(2, '0');
-    const min = `${now.getMinutes()}`.padStart(2, '0');
+    // const now = new Date();
+    // const day = `${now.getDate()}`.padStart(2, '0');
+    // const month = `${now.getMonth() + 1}`.padStart(2, '0');
+    // const year = now.getFullYear();
+    // const hour = `${now.getHours()}`.padStart(2, '0');
+    // const min = `${now.getMinutes()}`.padStart(2, '0');
 
-    labelDate.textContent = `${day}/${month}/${year}, ${hour}:${min}`;
+    // labelDate.textContent = `${day}/${month}/${year}, ${hour}:${min}`;
+
+    // Experimenting API
+    const now = new Date();
+    const options = {
+      hour: 'numeric',
+      minute: 'numeric',
+      day: 'numeric',
+      month: 'numeric',
+      year: 'numeric',
+      // weekday: 'long',
+    };
+    // BROWSER LOCALE
+    // const locale = navigator.language;
+
+    labelDate.textContent = new Intl.DateTimeFormat(
+      currentAccount.locale,
+      options
+    ).format(now);
 
     // Clear input fields
     inputLoginUsername.value = inputLoginPin.value = '';
