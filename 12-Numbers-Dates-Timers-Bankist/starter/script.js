@@ -101,27 +101,31 @@ const inputClosePin = document.querySelector('.form__input--pin');
 /////////////////////////////////////////////////
 // Functions
 
+// Internatialization - Date
 const formatMovementDate = function (date, locale) {
+  // Calculates Days Passed since movement date
   const calcDaysPassed = (date1, date2) =>
     Math.round(Math.abs(date2 - date1) / (1000 * 60 * 60 * 24));
-
   const daysPassed = calcDaysPassed(new Date(), date);
-
   if (daysPassed === 0) return 'Today';
   if (daysPassed === 1) return 'Yesterday';
   if (daysPassed <= 7) return `${daysPassed} days ago`;
-
-  // const day = `${date.getDate()}`.padStart(2, '0');
-  // const month = `${date.getMonth() + 1}`.padStart(2, '0');
-  // const year = date.getFullYear();
-
-  // return `${day}/${month}/${year}`;
   return new Intl.DateTimeFormat(locale).format(date);
 };
 
+// Internatialization - Number
+const formatCur = function (value, locale, currency) {
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency: currency,
+  }).format(value);
+};
+
+// Displays Transaction History
 const displayMovements = function (acc, sort = false) {
   containerMovements.innerHTML = '';
 
+  // Sorts movements whenever sort button pressed, default is false
   const movs = sort
     ? acc.movements.slice().sort((a, b) => a - b)
     : acc.movements;
@@ -131,35 +135,37 @@ const displayMovements = function (acc, sort = false) {
 
     const date = new Date(acc.movementsDates[i]);
     const displayDate = formatMovementDate(date, acc.locale);
+    const formattedMov = formatCur(mov, acc.locale, acc.currency);
     const html = `
       <div class="movements__row">
         <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
     <div class="movements__date">${displayDate}</div>
-        <div class="movements__value">${mov.toFixed(2)}€</div>
+        <div class="movements__value">${formattedMov}</div>
       </div>
     `;
-
     containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
 
+// Calculates current balance
 const calcDisplayBalance = function (acc) {
   acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${acc.balance.toFixed(2)}€`;
+  labelBalance.textContent = formatCur(acc.balance, acc.locale, acc.currency);
 };
 
+// Calculates In, Out, Interest
 const calcDisplaySummary = function (acc) {
   const incomes = acc.movements
     .filter(mov => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumIn.textContent = `${incomes.toFixed(2)}€`;
+  labelSumIn.textContent = formatCur(incomes, acc.locale, acc.currency);
 
   const out = acc.movements
     .filter(mov => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumOut.textContent = `${Math.abs(out).toFixed(2)}€`;
+  labelSumOut.textContent = formatCur(Math.abs(out), acc.locale, acc.currency);
 
   const interest = acc.movements
     .filter(mov => mov > 0)
@@ -168,9 +174,10 @@ const calcDisplaySummary = function (acc) {
       return int >= 1;
     })
     .reduce((acc, int) => acc + int, 0);
-  labelSumInterest.textContent = `${interest.toFixed(2)}€`;
+  labelSumInterest.textContent = formatCur(interest, acc.locale, acc.currency);
 };
 
+// Creates usernames
 const createUsernames = function (accs) {
   accs.forEach(function (acc) {
     acc.username = acc.owner
@@ -182,6 +189,7 @@ const createUsernames = function (accs) {
 };
 createUsernames(accounts);
 
+// Updates UI with the current account details
 const updateUI = function (acc) {
   // Display movements
   displayMovements(acc);
@@ -204,8 +212,7 @@ currentAccount = account1;
 updateUI(currentAccount);
 containerApp.style.opacity = 100;
 
-// /////////////////////////////////////////////////////////////////
-
+// Login Button
 btnLogin.addEventListener('click', function (e) {
   // Prevent form from submitting
   e.preventDefault();
@@ -220,16 +227,6 @@ btnLogin.addEventListener('click', function (e) {
       currentAccount.owner.split(' ')[0]
     }`;
     containerApp.style.opacity = 100;
-
-    // Create current date and time
-    // const now = new Date();
-    // const day = `${now.getDate()}`.padStart(2, '0');
-    // const month = `${now.getMonth() + 1}`.padStart(2, '0');
-    // const year = now.getFullYear();
-    // const hour = `${now.getHours()}`.padStart(2, '0');
-    // const min = `${now.getMinutes()}`.padStart(2, '0');
-
-    // labelDate.textContent = `${day}/${month}/${year}, ${hour}:${min}`;
 
     // Experimenting API
     const now = new Date();
@@ -258,6 +255,7 @@ btnLogin.addEventListener('click', function (e) {
   }
 });
 
+// Transfer Button
 btnTransfer.addEventListener('click', function (e) {
   e.preventDefault();
   const amount = +inputTransferAmount.value;
@@ -284,6 +282,7 @@ btnTransfer.addEventListener('click', function (e) {
   }
 });
 
+// Loan Button
 btnLoan.addEventListener('click', function (e) {
   e.preventDefault();
 
@@ -299,6 +298,7 @@ btnLoan.addEventListener('click', function (e) {
   inputLoanAmount.value = '';
 });
 
+// Close Account
 btnClose.addEventListener('click', function (e) {
   e.preventDefault();
 
@@ -321,13 +321,16 @@ btnClose.addEventListener('click', function (e) {
   inputCloseUsername.value = inputClosePin.value = '';
 });
 
+// Sorting Money Movements
 let sorted = false;
+
 btnSort.addEventListener('click', function (e) {
   e.preventDefault();
   displayMovements(currentAccount, !sorted);
   sorted = !sorted;
 });
 
+// Testing modulo operator by colouring every 2nd/3rd movements
 const isEven = n => n % 2 === 0;
 
 labelBalance.addEventListener('click', function () {
@@ -347,3 +350,18 @@ labelBalance.addEventListener('click', function () {
 //   new Date(2037, 3, 4),
 //   new Date(2037, 3, 14, 10, 8)
 // );
+
+const num = 3884764.23;
+
+const options = {
+  style: 'currency',
+  unit: 'mile-per-hour',
+  currency: 'EUR',
+  // useGrouping: false,
+};
+
+console.log(new Intl.NumberFormat('en-US', options).format(num));
+console.log(new Intl.NumberFormat('en-UK', options).format(num));
+console.log(new Intl.NumberFormat('de-DE', options).format(num));
+console.log(new Intl.NumberFormat('ar-SY', options).format(num));
+console.log(new Intl.NumberFormat(navigator.language, options).format(num));
