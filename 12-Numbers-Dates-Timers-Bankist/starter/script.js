@@ -201,16 +201,36 @@ const updateUI = function (acc) {
   calcDisplaySummary(acc);
 };
 
+const startLogoutTimer = function () {
+  const tick = function () {
+    const min = String(Math.floor(time / 60)).padStart(2, 0);
+    const sec = String(time % 60).padStart(2, 0);
+
+    labelTimer.textContent = `${min}:${sec}`;
+
+    if (time === 0) {
+      clearInterval(timer);
+      labelWelcome.textContent = 'Login to get started';
+      containerApp.style.opacity = 0;
+    }
+    time--;
+  };
+  let time = 300;
+  tick();
+  const timer = setInterval(tick, 1000);
+  return timer;
+};
+
 ///////////////////////////////////////
 // Event handlers
-let currentAccount;
+let currentAccount, timer;
 
 // /////////////////////////////////////////////////////////////////
 
 // Fake always login
-currentAccount = account1;
-updateUI(currentAccount);
-containerApp.style.opacity = 100;
+// currentAccount = account1;
+// updateUI(currentAccount);
+// containerApp.style.opacity = 100;
 
 // Login Button
 btnLogin.addEventListener('click', function (e) {
@@ -250,6 +270,10 @@ btnLogin.addEventListener('click', function (e) {
     inputLoginUsername.value = inputLoginPin.value = '';
     inputLoginPin.blur();
 
+    // Timer
+    if (timer) clearInterval(timer);
+    timer = startLogoutTimer();
+
     // Update UI
     updateUI(currentAccount);
   }
@@ -279,6 +303,10 @@ btnTransfer.addEventListener('click', function (e) {
     receiverAcc.movementsDates.push(new Date().toISOString());
     // Update UI
     updateUI(currentAccount);
+
+    // Reset timer
+    clearInterval(timer);
+    timer = startLogoutTimer();
   }
 });
 
@@ -295,6 +323,9 @@ btnLoan.addEventListener('click', function (e) {
       currentAccount.movementsDates.push(new Date().toISOString());
       // Update UI
       updateUI(currentAccount);
+      // Reset timer
+      clearInterval(timer);
+      timer = startLogoutTimer();
     }, 2500);
   }
   inputLoanAmount.value = '';
@@ -353,40 +384,40 @@ labelBalance.addEventListener('click', function () {
 //   new Date(2037, 3, 14, 10, 8)
 // );
 
-const num = 3884764.23;
+// const num = 3884764.23;
 
-const options = {
-  style: 'currency',
-  unit: 'mile-per-hour',
-  currency: 'EUR',
-  // useGrouping: false,
-};
+// const options = {
+//   style: 'currency',
+//   unit: 'mile-per-hour',
+//   currency: 'EUR',
+// useGrouping: false,
+// };
 
-console.log(new Intl.NumberFormat('en-US', options).format(num));
-console.log(new Intl.NumberFormat('en-UK', options).format(num));
-console.log(new Intl.NumberFormat('de-DE', options).format(num));
-console.log(new Intl.NumberFormat('ar-SY', options).format(num));
-console.log(new Intl.NumberFormat(navigator.language, options).format(num));
+// console.log(new Intl.NumberFormat('en-US', options).format(num));
+// console.log(new Intl.NumberFormat('en-UK', options).format(num));
+// console.log(new Intl.NumberFormat('de-DE', options).format(num));
+// console.log(new Intl.NumberFormat('ar-SY', options).format(num));
+// console.log(new Intl.NumberFormat(navigator.language, options).format(num));
 
 // setTimeout
 
-const ingredients = ['olives', 'spinach'];
-const pizzaTimer = setTimeout(
-  (ing1, ing2) => console.log(`Here is your pizza 🍕 with ${ing1} and ${ing2}`),
-  3000,
-  ...ingredients
-);
-console.log('Waiting...');
-if (ingredients.includes('spinach')) clearTimeout(pizzaTimer);
+// const ingredients = ['olives', 'spinach'];
+// const pizzaTimer = setTimeout(
+//   (ing1, ing2) => console.log(`Here is your pizza 🍕 with ${ing1} and ${ing2}`),
+//   3000,
+//   ...ingredients
+// );
+// console.log('Waiting...');
+// if (ingredients.includes('spinach')) clearTimeout(pizzaTimer);
 
 // setInterval
-setInterval(function () {
-  const now = new Date();
-  console.log(
-    new Intl.DateTimeFormat(currentAccount.locale, {
-      hour: 'numeric',
-      second: 'numeric',
-      minute: 'numeric',
-    }).format(now)
-  );
-}, 1000);
+// setInterval(function () {
+//   const now = new Date();
+//   console.log(
+//     new Intl.DateTimeFormat(currentAccount.locale, {
+//       hour: 'numeric',
+//       second: 'numeric',
+//       minute: 'numeric',
+//     }).format(now)
+//   );
+// }, 1000);
