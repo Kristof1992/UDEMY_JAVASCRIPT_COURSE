@@ -74,3 +74,52 @@ document
     // message.remove();
     message.parentElement.removeChild(message);
   });
+
+// Styles
+message.style.background = '#37383d'; // Message is the Cookie
+message.style.width = '120%';
+
+console.log(message.style.color);
+console.log(message.style.background);
+console.log(getComputedStyle(message).color);
+console.log(getComputedStyle(message).height);
+
+message.style.height =
+  Number.parseFloat(getComputedStyle(message).height, 10) + 30 + 'px';
+
+document.documentElement.style.setProperty('--color-primary', 'orangered');
+
+// Attributes
+const logo = document.querySelector('.nav__logo');
+console.log(logo.alt); // alt attribute
+console.log(logo.src); // src attribute
+console.log(logo.className); // className
+console.log(logo.designer); // If it's not a standard proprery JS won't create an object for it.
+
+logo.alt = 'Beautiful minimalist logo';
+
+// Non-standard - attributes
+// console.log(logo.designer); undefined
+console.log(logo.getAttribute('designer'));
+logo.setAttribute('company', 'Bankist');
+
+console.log('*** Paths');
+
+console.log(logo.src);
+console.log(logo.getAttribute('src'));
+
+const link = document.querySelector('.nav__link--btn');
+console.log(link.href);
+console.log(link.getAttribute('href'));
+
+// Data attributes
+console.log(logo.dataset.versionNumber);
+
+// Classes
+logo.classList.add('c');
+logo.classList.remove('c');
+logo.classList.toggle('c');
+logo.classList.contains('c');
+
+// Don't use - Overwrites all classes!
+// logo.className = 'Jonas';
