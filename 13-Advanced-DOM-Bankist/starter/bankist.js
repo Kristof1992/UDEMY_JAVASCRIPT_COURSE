@@ -104,5 +104,16 @@ btnScrollTo.addEventListener('click', function (e) {
   // });
 
   // Modern way - Only works in modern browsers
-  // section1.scrollIntoView({ behavior: 'smooth' });
+  section1.scrollIntoView({ behavior: 'smooth' });
 });
+
+const h1 = document.querySelector('h1');
+const alertH1 = function () {
+  alert('addEventListener: ');
+  h1.removeEventListener('mouseenter', alertH1);
+};
+h1.addEventListener('mouseenter', alertH1);
+
+// h1.onmouseenter = function (e) {
+//   alert('addEventListener: ');
+// };
