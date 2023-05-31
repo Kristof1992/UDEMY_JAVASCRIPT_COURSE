@@ -161,23 +161,25 @@ tabsContainer.addEventListener('click', function (e) {
 
 const links = document.querySelector('.nav__links');
 
-const handleHover = function (e) {
-  // Only handle event if its a 'nav__link'
-  if (e.target.classList.contains('nav__link')) {
-    const link = e.target;
-    const siblings = link.closest('nav').querySelectorAll('.nav__link'); // get Parent with 'nav' then select all its children with 'nav__link'. That selects all menu links for us.
-    const logo = link.closest('.nav').querySelector('img'); // select same parent as before then select its descendant 'img'
+const handleHover = function (opacity) {
+  return function (e) {
+    // Only handle event if its a 'nav__link'
+    if (e.target.classList.contains('nav__link')) {
+      const link = e.target;
+      const siblings = link.closest('nav').querySelectorAll('.nav__link'); // get Parent with 'nav' then select all its children with 'nav__link'. That selects all menu links for us.
+      const logo = link.closest('.nav').querySelector('img'); // select same parent as before then select its descendant 'img'
 
-    // Do the magic w siblings and logo
-    siblings.forEach(el => {
-      // Excluding current link
-      if (el !== link) {
-        el.style.opacity = this;
-      }
-      logo.style.opacity = this;
-    });
-  }
+      // Do the magic w siblings and logo
+      siblings.forEach(el => {
+        // Excluding current link
+        if (el !== link) {
+          el.style.opacity = opacity;
+        }
+        logo.style.opacity = opacity;
+      });
+    }
+  };
 };
 // Passing an "argument" into handler
-nav.addEventListener('mouseover', handleHover.bind(0.5));
-nav.addEventListener('mouseout', handleHover.bind(1));
+nav.addEventListener('mouseover', handleHover(0.5));
+nav.addEventListener('mouseout', handleHover(1));
