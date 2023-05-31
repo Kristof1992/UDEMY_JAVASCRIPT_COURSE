@@ -12,6 +12,12 @@ const header = document.querySelector('.header');
 const message = document.createElement('div');
 const btnScrollTo = document.querySelector('.btn--scroll-to');
 const section1 = document.querySelector('#section--1');
+// Tabs
+const tabs = document.querySelectorAll('.operations__tab');
+const tabsContainer = document.querySelector('.operations__tab-container');
+const tabsContent = document.querySelectorAll('.operations__content');
+
+const nav = document.querySelector('.nav');
 
 const openModal = function (e) {
   e.preventDefault();
@@ -138,16 +144,10 @@ const randomColor = () =>
 //   }
 // });
 
-// Tabs
-const tabs = document.querySelectorAll('.operations__tab');
-const tabsContainer = document.querySelector('.operations__tab-container');
-const tabsContent = document.querySelectorAll('.operations__content');
-
 tabsContainer.addEventListener('click', function (e) {
   const clicked = e.target.closest('.operations__tab');
   if (!clicked) return; // Null is falsy value
   tabs.forEach(t => t.classList.remove('operations__tab--active'));
-  // clicked.childNodes;
   clicked.classList.add('operations__tab--active');
 
   // Activate content area
@@ -156,3 +156,28 @@ tabsContainer.addEventListener('click', function (e) {
     .querySelector(`.operations__content--${clicked.dataset.tab}`)
     .classList.add('operations__content--active');
 });
+
+// Menu fade animation
+
+const links = document.querySelector('.nav__links');
+
+const handleHover = function (e) {
+  // Only handle event if its a 'nav__link'
+  if (e.target.classList.contains('nav__link')) {
+    const link = e.target;
+    const siblings = link.closest('nav').querySelectorAll('.nav__link'); // get Parent with 'nav' then select all its children with 'nav__link'. That selects all menu links for us.
+    const logo = link.closest('.nav').querySelector('img'); // select same parent as before then select its descendant 'img'
+
+    // Do the magic w siblings and logo
+    siblings.forEach(el => {
+      // Excluding current link
+      if (el !== link) {
+        el.style.opacity = this;
+      }
+      logo.style.opacity = this;
+    });
+  }
+};
+// Passing an "argument" into handler
+nav.addEventListener('mouseover', handleHover.bind(0.5));
+nav.addEventListener('mouseout', handleHover.bind(1));
