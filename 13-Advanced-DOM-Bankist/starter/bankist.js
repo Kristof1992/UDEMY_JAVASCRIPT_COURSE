@@ -42,21 +42,21 @@ document.addEventListener('keydown', function (e) {
 });
 
 // Cookie Message
-message.classList.add('cookie-message');
+// message.classList.add('cookie-message');
 // message.textContent = 'We use cookies for improved functionality and analytics.';
-message.innerHTML =
-  'We use cookies for improved functionality and analytics. <button class="btn btn--close-cookie">Got it!</button>';
+// message.innerHTML =
+//   'We use cookies for improved functionality and analytics. <button class="btn btn--close-cookie">Got it!</button>';
 
 // We can move elements
-header.prepend(message);
-header.append(message);
+// header.prepend(message);
+// header.append(message);
 
-document
-  .querySelector('.btn--close-cookie')
-  .addEventListener('click', function () {
-    // message.remove();
-    message.parentElement.removeChild(message);
-  });
+// document
+//   .querySelector('.btn--close-cookie')
+//   .addEventListener('click', function () {
+//     // message.remove();
+//     message.parentElement.removeChild(message);
+//   });
 
 // Button Scrolling
 btnScrollTo.addEventListener('click', function (e) {
@@ -183,3 +183,32 @@ const handleHover = function (opacity) {
 // Passing an "argument" into handler
 nav.addEventListener('mouseover', handleHover(0.5));
 nav.addEventListener('mouseout', handleHover(1));
+
+// const initialCoordinates = section1.getBoundingClientRect();
+// Sticky navigation
+// window.addEventListener('scroll', function (e) {
+//   if (this.scrollY > initialCoordinates.top) {
+//     nav.classList.add('sticky');
+//   } else {
+//     nav.classList.remove('sticky');
+//   }
+// });
+
+// Sticky navigation: Intersection Observer API
+const navHeight = nav.getBoundingClientRect().height;
+
+const stickyNav = function (entries, observer) {
+  const [entry] = entries;
+  if (!entry.isIntersecting) {
+    nav.classList.add('sticky');
+  } else {
+    nav.classList.remove('sticky');
+  }
+};
+// rootMargin is the height of the nav
+const headerObserver = new IntersectionObserver(stickyNav, {
+  root: null,
+  threshold: 0,
+  rootMargin: `-${navHeight}px`,
+});
+headerObserver.observe(header);
