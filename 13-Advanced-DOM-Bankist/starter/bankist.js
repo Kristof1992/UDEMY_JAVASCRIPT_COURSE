@@ -273,9 +273,6 @@ const sliderFunction = function () {
     });
   };
 
-  // slider.style.transform = 'scale(0.4) translateX(-800px)';
-  slider.style.overflow = 'visible';
-
   const nextSlide = function () {
     curSlide = (curSlide + 1) % maxSlide;
     activateDot(curSlide);
@@ -289,6 +286,7 @@ const sliderFunction = function () {
   };
 
   const goToSlide = function (slide) {
+    curSlide = slide;
     slides.forEach((s, i) => {
       s.style.transform = `translateX(${100 * (i - slide)}%)`;
     });
@@ -330,3 +328,20 @@ const sliderFunction = function () {
   });
 };
 sliderFunction();
+
+// Fires when the HTML tree is ready.
+// document.addEventListener('DOMContentLoaded', function (e) {
+//   console.log('HTML parsed and DOM tree built!', e);
+// });
+
+// Fires when page is loaded
+// window.addEventListener('load', function (e) {
+//   console.log('Page fully loaded');
+// });
+
+// Event fires whenever user tries to leave a site
+// window.addEventListener('beforeunload', function (e) {
+//   e.preventDefault();
+//   console.log(e);
+//   e.returnValue = '';
+// });
