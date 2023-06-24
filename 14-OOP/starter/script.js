@@ -263,3 +263,22 @@ const oopInheritance = (function () {
   console.log(paidUser);
   paidUser.sayName();
 })();
+
+// Prototypal Inheritance
+
+console.log(p1.__proto__.__proto__.__proto__);
+
+console.dir(Person.prototype.constructor === Person);
+
+console.log(new Array().__proto__);
+console.log(new Array().__proto__ === Array.prototype);
+
+Array.prototype.unique = function () {
+  return [new Set(this)];
+};
+
+console.log(arr.unique());
+
+const h1 = document.querySelector('h1');
+
+console.dir(x => x + 1);
