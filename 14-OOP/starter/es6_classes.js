@@ -26,6 +26,11 @@ class PersonCl {
   get fullName() {
     return this._fullName;
   }
+  // Static method
+  static hey() {
+    console.log(`Hey there ✋`);
+    console.log(this);
+  }
 }
 
 const jessica = new PersonCl('Jessica Davis', 1996);
@@ -70,3 +75,18 @@ console.log(account.movements);
 console.log(jessica.age);
 
 console.log(jessica.fullName);
+
+const Person = function (firstName, birthYear) {
+  this.firstName = firstName;
+  this.birthYear = birthYear;
+};
+
+Person.hey = function () {
+  console.log(`Hey there ✋`);
+  console.log(this);
+};
+
+Person.hey();
+PersonCl.hey();
+
+console.log();
