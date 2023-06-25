@@ -76,7 +76,7 @@ console.log(jessica.age);
 
 console.log(jessica.fullName);
 
-const Person = function (firstName, birthYear) {
+const Person = function (firstName = 'Unnamed', birthYear = '-1') {
   this.firstName = firstName;
   this.birthYear = birthYear;
 };
@@ -86,7 +86,66 @@ Person.hey = function () {
   console.log(this);
 };
 
+Person.prototype.sayHi = function () {
+  console.log(`Hi`);
+};
+
 Person.hey();
+const p1 = new Person();
+p1.sayHi();
+console.dir(Person);
+
 PersonCl.hey();
 
-console.log();
+console.log('Object.create');
+
+const PersonProto = {
+  calcAge() {
+    return 2023 - this.birthYear;
+  },
+
+  init(firstName, birthYear) {
+    this.firstName = firstName;
+    this.birthYear = birthYear;
+  },
+};
+
+const steven = Object.create(PersonProto);
+steven.init('Steven', 2002);
+console.log(steven);
+console.log(steven.__proto__);
+
+const sarah = Object.create(PersonProto);
+console.log(sarah);
+
+console.log(Person.prototype.__proto__ === Object.prototype);
+console.dir(Person.prototype.constructor === Person);
+
+// const oop = (function () {
+//   // Object literal
+//   const userFunctions = {
+//     add: function () {
+//       this.points += 1;
+//     },
+//     login: function () {
+//       console.log('You are logged in.');
+//     },
+//   };
+
+//   function userCreator(name, points) {
+//     const newUser = Object.create(userFunctions);
+//     newUser.name = name;
+//     newUser.points = points;
+//     return newUser;
+//   }
+
+//   const user = userCreator('Ryan', 3);
+//   console.log(user);
+
+//   // Sanity check
+
+//   console.log(user.constructor === Object); // true
+//   console.log(user.__proto__ === userFunctions); // true
+//   console.log(userFunctions.constructor === Object); // true
+//   console.log(userFunctions.__proto__ === Object.prototype); // true
+// })();
