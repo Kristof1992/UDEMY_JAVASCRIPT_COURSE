@@ -5,8 +5,6 @@ class Workout {
   id = (Date.now() + '').slice(-10);
   clicks = 0;
   constructor(coords, distance, duration) {
-    //   date = new Date();
-    // id = (new Date() + '').slice(-10);
     this.coords = coords; // [lat, lng]
     this.distance = distance; //km
     this.duration = duration; // minutes
@@ -68,6 +66,7 @@ const inputDuration = document.querySelector('.form__input--duration');
 const inputCadence = document.querySelector('.form__input--cadence');
 const inputElevation = document.querySelector('.form__input--elevation');
 
+// Web APP entry point
 class App {
   #map;
   #mapZoomLevel = 13;
@@ -88,20 +87,25 @@ class App {
   }
 
   /**
-   * getCurrentPosition(cfnSuccess, cfnFailure) -> The callback function won't execute right away
+   * getCurrentPosition(successCallback, errorCallback) -> The callback function won't execute right away
    */
+  //prettier-ignore
   _getPosition() {
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        this._loadMap.bind(this),
-        function () {
+      navigator.geolocation.getCurrentPosition(this._loadMap.bind(this), function () {
           alert(`Could not get your position`);
         }
       );
     }
   }
 
+  /**
+   * Once the browser gets access to location _loadMap starts setting the Map.
+   *
+   * @param position: GeolocationPosition - Browser Location Object
+   */
   _loadMap(position) {
+    console.log(position);
     const { latitude } = position.coords;
     const { longitude } = position.coords;
     const coords = [latitude, longitude];
@@ -112,6 +116,20 @@ class App {
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
     }).addTo(this.#map);
+
+    const myIcon = L.icon({
+      iconUrl: 'pin.png',
+      iconSize: [34, 34],
+      // iconAnchor: [22, 94],
+      // popupAnchor: [-3, -76],
+      // shadowSize: [68, 95],
+      // shadowAnchor: [22, 94],
+    });
+
+    const currentPositionMarker = L.marker([latitude, longitude], {
+      icon: myIcon,
+    });
+    currentPositionMarker.addTo(this.#map).openPopup();
 
     // Event handler attached here
     this.#map.on('click', this._showForm.bind(this));
@@ -133,7 +151,6 @@ class App {
     // Empty inputs
     // prettier-ignore
     inputDistance.value =inputDuration.value =inputCadence.value =inputElevation.value = '';
-
     form.style.display = 'none';
     form.classList.add('hidden');
     setTimeout(() => (form.style.display = 'grid'), 1000);
@@ -184,19 +201,9 @@ class App {
 
     // Add new obj to workout array
     this.#workouts.push(workout);
-
     this._renderWorkoutMarker(workout);
-
     this._renderWorkout(workout);
-    // Render workout on list
-
-    // Clear inputfields
-
-    // Hide form, clear input list
-    // prettier-ignore
-
     this._hideForm();
-
     this._setLocalStorage();
   }
 
