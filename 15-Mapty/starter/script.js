@@ -77,7 +77,11 @@ class App {
    * The Constructor sets the Map with current coordinates
    */
   constructor() {
+    // Get user's position
     this._getPosition();
+    // Get data from local storage
+    this._getLocalStorage();
+
     form.addEventListener('submit', this._newWorkout.bind(this));
     inputType.addEventListener('change', this._toggleElevationField);
     containerWorkouts.addEventListener('click', this._moveToPopup.bind(this));
@@ -101,6 +105,7 @@ class App {
     const { latitude } = position.coords;
     const { longitude } = position.coords;
     const coords = [latitude, longitude];
+
     this.#map = L.map('map').setView(coords, this.#mapZoomLevel);
 
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -110,6 +115,11 @@ class App {
 
     // Event handler attached here
     this.#map.on('click', this._showForm.bind(this));
+
+    // Shows Marker on Map
+    this.#workouts.forEach(w => {
+      this._renderWorkoutMarker(w);
+    });
   }
 
   // Shows the form by removing hidden class
@@ -172,10 +182,6 @@ class App {
       workout = new Cycling([lat, lng], distance, duration, elevation);
     }
 
-    // Check if data is valid
-
-    // If workout running, create running/cycling object
-
     // Add new obj to workout array
     this.#workouts.push(workout);
 
@@ -190,6 +196,8 @@ class App {
     // prettier-ignore
 
     this._hideForm();
+
+    this._setLocalStorage();
   }
 
   _renderWorkoutMarker(workout) {
@@ -265,21 +273,34 @@ class App {
     if (!workoutEl) return;
 
     const workout = this.#workouts.find(el => el.id === workoutEl.dataset.id);
-    console.log(workout);
 
     this.#map.setView(workout.coords, this.#mapZoomLevel, {
       animate: true,
       pan: { duration: 1 },
     });
 
-    workout.click();
+    // workout.click();
+  }
+
+  _setLocalStorage() {
+    localStorage.setItem('workouts', JSON.stringify(this.#workouts)); // Browser data
+  }
+
+  _getLocalStorage() {
+    const data = JSON.parse(localStorage.getItem('workouts'));
+
+    if (!data) return;
+
+    this.#workouts = data;
+    this.#workouts.forEach(w => {
+      this._renderWorkout(w);
+    });
+  }
+
+  reset() {
+    localStorage.removeItem('workouts');
+    location.reload(); // Window.location
   }
 }
 
 const app = new App();
-
-// const run1 = new Running([39, -12], 5.2, 24, 178);
-// const cycling1 = new Cycling([39, -12], 27, 95, 523);
-
-// console.log(run1);
-// console.log(cycling1);
