@@ -143,7 +143,7 @@ const renderCountry = function (data, className = '') {
 };
 
 // getCountryAndNeighbour('portugal'); // neighbour Vienna
-getCountryAndNeighbour('usa');
+getCountryAndNeighbour('hungary');
 
 // 1st call
 setTimeout(() => {
