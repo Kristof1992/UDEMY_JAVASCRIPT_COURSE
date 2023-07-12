@@ -6,6 +6,7 @@ const apiKEY = '4ed4cb41df56474ba36e0f70c0fdd8e9';
 
 const renderError = function (msg) {
   countriesContainer.insertAdjacentText('beforeend', msg);
+  countriesContainer.style.opacity = 1;
 };
 
 const getPosition = function () {
@@ -81,19 +82,28 @@ const whereAmI = async function () {
     if(!result_REST_COUNTRIES_API.ok) throw new Error('Problem getting country');
     const result_REST_COUNTRIES_API_JSON = await result_REST_COUNTRIES_API.json();
     renderCountry(result_REST_COUNTRIES_API_JSON[0]);
+    return `You are in ${city}, ${country}`;
   } catch (err) {
     console.error(`${err} 💥`);
     renderError(`Something went wrong 💥 ${err.message}`);
+    throw err;
   }
 };
 
-// try {
-//   let y = 1;
-//   const x = 2;
-//   x = 3;
-// } catch (e) {
-//   console.error(e);
-// }
+// console.log('1: Getting location');
+// whereAmI()
+// .then(() => console.log(`2: ${city}`))
+// .catch((err) => console.error(`2: ${err.message} 💥`))
+// .finally(()=> console.log('3: Finished getting location'));
 
-whereAmI();
-// console.log('First');
+(async function () {
+  try {
+    console.log('1: Getting location');
+    const city = await whereAmI();
+    console.log(`2: ${city}`);
+  } catch (err) {
+    console.error(`2: ${err.message} 💥`);
+  } finally {
+    console.log('3: Finished getting location');
+  }
+})();
