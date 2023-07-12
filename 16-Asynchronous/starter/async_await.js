@@ -4,6 +4,10 @@ const btn = document.querySelector('.btn-country');
 const countriesContainer = document.querySelector('.countries');
 const apiKEY = '4ed4cb41df56474ba36e0f70c0fdd8e9';
 
+const renderError = function (msg) {
+  countriesContainer.insertAdjacentText('beforeend', msg);
+};
+
 const getPosition = function () {
   return new Promise(function (resolve, reject) {
     navigator.geolocation.getCurrentPosition(resolve, reject);
@@ -66,15 +70,30 @@ const newWhereAmI = function () {
 // ***** ASYNC/AWAIT *****
 // prettier-ignore
 const whereAmI = async function () {
-  const curPosition_GEOLOCATION_API = await getPosition();
-  const { latitude: lat, longitude: lng } = curPosition_GEOLOCATION_API.coords;
-  const result_GEOAPIFY_API = await fetch(`https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${lng}&apiKey=${apiKEY}`);
-  const result_GEOAPIFY_API_JSON = await result_GEOAPIFY_API.json();
-  const { city, country } = result_GEOAPIFY_API_JSON.features?.[0]?.properties;
-  const res = await fetch(`https://restcountries.com/v3.1/name/${country}`); // Blocks only in async!
-  const resJson = await res.json();
-  renderCountry(resJson[0]);
+  try {
+    const curPosition_GEOLOCATION_API = await getPosition();
+    const { latitude: lat, longitude: lng } = curPosition_GEOLOCATION_API.coords;
+    const result_GEOAPIFY_API = await fetch(`https://api.geoapify.com/v1/geocode/reverse?lat=${lat}&lon=${lng}&apiKey=${apiKEY}`);
+    if(!result_GEOAPIFY_API.ok) throw new Error('Problem getting location data');
+    const result_GEOAPIFY_API_JSON = await result_GEOAPIFY_API.json();
+    const { city, country } = result_GEOAPIFY_API_JSON.features?.[0]?.properties;
+    const result_REST_COUNTRIES_API = await fetch(`https://restcountries.com/v3.1/name/${country}`); // Blocks only in async!
+    if(!result_REST_COUNTRIES_API.ok) throw new Error('Problem getting country');
+    const result_REST_COUNTRIES_API_JSON = await result_REST_COUNTRIES_API.json();
+    renderCountry(result_REST_COUNTRIES_API_JSON[0]);
+  } catch (err) {
+    console.error(`${err} 💥`);
+    renderError(`Something went wrong 💥 ${err.message}`);
+  }
 };
+
+// try {
+//   let y = 1;
+//   const x = 2;
+//   x = 3;
+// } catch (e) {
+//   console.error(e);
+// }
 
 whereAmI();
 // console.log('First');
