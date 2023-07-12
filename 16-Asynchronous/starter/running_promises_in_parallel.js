@@ -137,4 +137,46 @@ const get3Countries = async function (c1, c2, c3) {
   }
 };
 
-get3Countries('portugal', 'canada', 'tanzania');
+// get3Countries('portugal', 'canada', 'tanzania');
+
+// ***** Promise Combinators *****
+
+// Promise.race - We get only 1 result! A rejected Promise can still race. Promise.race shortcircuits whenever
+// one of the Promises get settled.
+// (async function () {
+//   const res = await Promise.race([
+//     getJSON(`https://restcountries.com/v3.1/name/italy`, ''),
+//     getJSON(`https://restcountries.com/v3.1/name/egypt`, ''),
+//     getJSON(`https://restcountries.com/v3.1/name/mexico`, ''),
+//   ]);
+// //   console.log(res);
+// })();
+
+const timeout = function (s) {
+  return new Promise(function (_, reject) {
+    setTimeout(function () {
+      reject(new Error('request took too long!'));
+    }, s * 1000);
+  });
+};
+
+// Promise.race([
+//   getJSON(`https://restcountries.com/v3.1/name/egypt`, ''),
+//   timeout(0.85),
+// ])
+//   .then(res => console.log(res[0]))
+//   .catch(err => console.error(err));
+
+//   Promise.allSettled - won't shortcircuit!
+// Promise.allSettled([
+//   Promise.resolve('Success'),
+//   Promise.reject('Error'),
+//   Promise.resolve('Another Success'),
+// ]).then(res => console.log(res));
+
+// Promise.any - it returns the first fulfilled Promise
+Promise.any([
+  Promise.resolve('Success'),
+  Promise.reject('Error'),
+  Promise.reject('Error 2'),
+]).then(res => console.log(res));
