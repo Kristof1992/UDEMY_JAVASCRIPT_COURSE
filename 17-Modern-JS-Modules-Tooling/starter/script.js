@@ -1,95 +1,13 @@
 // Importing Module
-// Named imports
-// import { addToCart, totalPrice, totalQuantity } from './shoppingCart.js';
-// addToCart('bread', 5);
-// console.log(totalPrice, totalQuantity);
-
 console.log('Importing module');
 
-// console.log('Start fetching...');
-// const res = await fetch('https://jsonplaceholder.typicode.com/posts');
-// const data = await res.json();
-// console.log(data);
-
-// console.log('Something');
-
-// Importing everything as a Module Object
-// import * as ShoppingCart from './shoppingCart.js';
-// ShoppingCart.addToCart('bread', 5);
-// console.log(ShoppingCart);
-
-// import add, { addToCart, totalPrice as price, tq } from './shoppingCart.js';
-// import { cart } from './shoppingCart.js';
-// import add from './shoppingCart.js';
-
 import add, { cart } from './shoppingCart.js';
-add('pizza', 2);
-add('bread', 5);
-add('apples', 4);
-
-console.log(cart);
-
-// const getLastPost = async function () {
-//   const res = await fetch('https://jsonplaceholder.typicode.com/posts');
-//   const data = await res.json();
-//   console.log(data);
-//   //   for (let i = 0; i < 5_000_000_000; i++) {} // Blocks UI
-//   return { title: data.at(-1).title, text: data.at(-1).body };
-// };
-
-// const lastPost = getLastPost();
-// console.log(lastPost);
-
-// const lastPost2 = await getLastPost();
-// console.log(lastPost2);
-
-// const ShoppingCart2 = (function () {
-//   const cart = [];
-//   const shippingCost = 10;
-//   const totalPrice = 237;
-//   const totalQuantity = 23;
-
-//   const addToCart = function (product, quantity) {
-//     cart.push({ product, quantity });
-//     console.log(
-//       `${product} ${quantity} added to cart (shipping cost is ${shippingCost})`
-//     );
-//   };
-
-//   const orderStock = function (product, quantity) {
-//     cart.push({ product, quantity });
-//     console.log(`${product} ${quantity} ordered from supplier`);
-//   };
-
-//   return {
-//     addToCart,
-//     cart,
-//     totalPrice,
-//     totalQuantity,
-//   };
-// })();
-
-// ShoppingCart2.addToCart('apple', 4);
-// ShoppingCart2.addToCart('pizza', 2);
-// console.log(ShoppingCart2);
-// console.log(ShoppingCart2.shippingCost); // private field
-
-// Common JS
-// Export NodeJS
-// export.addToCart = function (product, quantity) {
-//       cart.push({ product, quantity });
-//       console.log(
-//         `${product} ${quantity} added to cart (shipping cost is ${shippingCost})`
-//       );
-// };
-
-// Import
-// Import in NodeJS
-// const {addToCart} = require('./shoppingCart.js');
-
-// import cloneDeep from './node_modules/lodash-es/cloneDeep.js';
 import cloneDeep from 'lodash-es';
-// import cloneDeep from 'lodash';
+
+add('pizza', 2);
+// add('bread', 5);
+// add('apples', 4);
+console.log(cart);
 
 const state = {
   cart: [
@@ -108,3 +26,22 @@ console.log(properClone);
 if (module.hot) {
   module.hot.accept();
 }
+
+class Person {
+  #greeting = 'Hey';
+  constructor(name) {
+    this.name = name;
+    console.log(`${this.#greeting}, ${this.name}`);
+  }
+}
+
+const peter = new Person('Peter');
+const arrow = 'Peter' ?? null;
+
+console.log(cart.find(el => el.quantity >= 2));
+Promise.resolve('TEST').then(x => console.log(x));
+
+// Polyfilling library
+import 'core-js/stable';
+import 'core-js/stable/promise';
+import 'regenerator-runtime/runtime';
