@@ -5,6 +5,13 @@ class RecipeView {
   #parentElement = document.querySelector('.recipe');
   #data;
 
+  /**
+   * @param {*} data: recipe {}
+   * Saves recipe to RecipeViewObj
+   * Dynamically generates RecipeView [HTML]
+   * Clears Parent element so newly inserted HTML will have its own space.
+   * Inserts newly created HTML to DOM
+   */
   render(data) {
     this.#data = data;
     const markup = this.#generateMarkup();
@@ -16,7 +23,8 @@ class RecipeView {
     this.#parentElement.innerHTML = '';
   }
 
-  // Adds spinner when rendering recipe
+  // Adds spinner when rendering recipe used from Controller
+  // and injects to DOM
   renderSpinner = function () {
     const markup = `
     <div class="spinner">
@@ -29,6 +37,7 @@ class RecipeView {
     this.#parentElement.insertAdjacentHTML('beforeend', markup);
   };
 
+  // Creates the
   #generateMarkup() {
     return `
     <figure class="recipe__fig">
@@ -117,6 +126,7 @@ class RecipeView {
     `;
   }
 
+  // 3rd party API used here to process Recipe ingredients
   #generateMarkupIngredient(ing) {
     return `
       <li class="recipe__ingredient">
@@ -134,4 +144,5 @@ class RecipeView {
   }
 }
 
+// Creating and Exporting the object so we expose only the functionality of the obj
 export default new RecipeView();

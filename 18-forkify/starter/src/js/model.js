@@ -1,17 +1,18 @@
-const API_KEY = 'ad997c36-4189-4341-bad9-b291058f999c';
+import { async } from 'regenerator-runtime';
+import { API_KEY, API_URL } from './config.js';
+import { getJSON } from './helpers.js';
+
+// https://forkify-api.herokuapp.com/api/v2/recipes/${id}?key=${API_KEY}
 
 export const state = {
   recipe: {},
 };
 
+// Queries data from api and stores it in state.recipe object
 export const loadRecipe = async function (id) {
   try {
-    const res = await fetch(
-      `https://forkify-api.herokuapp.com/api/v2/recipes/${id}?key=${API_KEY}`
-    );
-    const data = await res.json();
-    if (!res.ok) throw new Error(`${data.message}`);
-
+    const data = await getJSON(`${API_URL}/${id}?key=${API_KEY}`);
+    console.log('Shouldn t execute');
     const { recipe } = data.data;
     state.recipe = {
       id: recipe.id,
@@ -24,6 +25,6 @@ export const loadRecipe = async function (id) {
       ingredients: recipe.ingredients,
     };
   } catch (err) {
-    console.error(err);
+    console.error('model', err);
   }
 };
