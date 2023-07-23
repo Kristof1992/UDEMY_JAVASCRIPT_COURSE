@@ -37,6 +37,11 @@ class RecipeView {
     this.#parentElement.insertAdjacentHTML('beforeend', markup);
   };
 
+  addHandlerRender(handler) {
+    // Adds same funtion to multiple events
+    ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, handler));
+  }
+
   // Creates the
   #generateMarkup() {
     return `
