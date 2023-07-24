@@ -32,7 +32,7 @@ const controlRecipes = async function () {
     // renderSpinner(recipeContainer);
     // `https://forkify-api.herokuapp.com/api/v2/recipes/5ed6604591c37cdc054bcc40?key=${API_KEY}`
   } catch (err) {
-    console.error('controller', err);
+    recipeView.renderError();
   }
 };
 
