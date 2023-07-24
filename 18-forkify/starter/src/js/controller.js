@@ -5,6 +5,7 @@ import 'regenerator-runtime/runtime'; // polyfilling async/await
 
 import * as model from '../js/model'; // Model imported here
 import recipeView from './views/recipeView'; // View imported here
+import searchView from './views/searchVIew'; // View imported here
 
 const recipeContainer = document.querySelector('.recipe');
 
@@ -23,7 +24,6 @@ const controlRecipes = async function () {
 
     // 1) loading recipe
     await model.loadRecipe(id); // invokes -> loadRecipe(hash)
-    console.log(id);
     // -> gets recipe field value from model.state
     const { recipe } = model.state;
 
@@ -36,7 +36,23 @@ const controlRecipes = async function () {
   }
 };
 
+const controlSearchResults = async function () {
+  try {
+    // 1) Get search query
+    const query = searchView.getQuery();
+    console.log(query);
+    if (!query) throw new Error('Empty Query');
+    // 2) Load search results
+    await model.loadSearchResults(query);
+    // 3) Render results
+    console.log(model.state.search.results);
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 const init = function () {
   recipeView.addHandlerRender(controlRecipes);
+  searchView.addHandlerSearch(controlSearchResults);
 };
 init();

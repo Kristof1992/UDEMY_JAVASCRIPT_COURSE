@@ -8,7 +8,7 @@ class RecipeView {
   #message = '';
 
   /**
-   * @param {*} data: recipe {}
+   * @param {*} data: recipeObj for rendering
    * Saves recipe to RecipeViewObj
    * Dynamically generates RecipeView [HTML]
    * Clears Parent element so newly inserted HTML will have its own space.
