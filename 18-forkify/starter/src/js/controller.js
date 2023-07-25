@@ -6,9 +6,15 @@ import 'regenerator-runtime/runtime'; // polyfilling async/await
 import * as model from '../js/model'; // Model imported here
 import recipeView from './views/recipeView'; // View imported here
 import searchView from './views/searchVIew'; // View imported here
+import resultsView from './views/resultsView';
+import { async } from 'regenerator-runtime';
+
+if (module.hot) {
+  module.hot.accept();
+}
 
 const recipeContainer = document.querySelector('.recipe');
-
+('#5ed6604591c37cdc054bc90b');
 // https://forkify-api.herokuapp.com/v2
 
 ///////////////////////////////////////
@@ -38,14 +44,14 @@ const controlRecipes = async function () {
 
 const controlSearchResults = async function () {
   try {
+    resultsView.renderSpinner();
     // 1) Get search query
-    const query = searchView.getQuery();
-    console.log(query);
-    if (!query) throw new Error('Empty Query');
+    const query = searchView.getQuery(); // keyword
+    if (!query) return;
     // 2) Load search results
     await model.loadSearchResults(query);
     // 3) Render results
-    console.log(model.state.search.results);
+    resultsView.render(model.state.search.results);
   } catch (err) {
     console.error(err);
   }

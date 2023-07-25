@@ -16,7 +16,7 @@ export const state = {
 };
 
 // Queries data from api and stores it in state.recipe object
-export const loadRecipe = async function (id) {
+export const loadRecipe = async function (id = '5ed6604591c37cdc054bc90b') {
   try {
     const data = await getJSON(`${API_URL}${id}?key=${API_KEY}`);
     const { recipe } = data.data;
