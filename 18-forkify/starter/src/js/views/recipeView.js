@@ -13,7 +13,7 @@ class RecipeView extends View {
     ['hashchange', 'load'].forEach(ev => window.addEventListener(ev, handler));
   }
 
-  // Creates the
+  // Here this._data is an Object
   _generateMarkup() {
     return `
     <figure class="recipe__fig">

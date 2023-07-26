@@ -1,7 +1,12 @@
-import View from './View';
-
 class SearchView {
   _parentElement = document.querySelector('.search');
+
+  addHandlerSearch(handler) {
+    this._parentElement.addEventListener('submit', function (e) {
+      e.preventDefault();
+      handler();
+    });
+  }
 
   getQuery() {
     const query = this._parentElement.querySelector('.search__field').value;
@@ -11,13 +16,6 @@ class SearchView {
 
   _clearInput() {
     this._parentElement.querySelector('.search__field').value = '';
-  }
-
-  addHandlerSearch(handler) {
-    this._parentElement.addEventListener('submit', function (e) {
-      e.preventDefault();
-      handler();
-    });
   }
 }
 

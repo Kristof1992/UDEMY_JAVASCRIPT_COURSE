@@ -7,17 +7,16 @@ import * as model from '../js/model'; // Model imported here
 import recipeView from './views/recipeView'; // View imported here
 import searchView from './views/searchVIew'; // View imported here
 import resultsView from './views/resultsView';
+import paginationView from './views/paginationView';
 import { async } from 'regenerator-runtime';
 
-if (module.hot) {
-  module.hot.accept();
-}
+// if (module.hot) {
+//   module.hot.accept();
+// }
 
-const recipeContainer = document.querySelector('.recipe');
-('#5ed6604591c37cdc054bc90b');
+// ('#5ed6604591c37cdc054bc90b');
+// const recipeContainer = document.querySelector('.recipe');
 // https://forkify-api.herokuapp.com/v2
-
-///////////////////////////////////////
 
 // Triggers on hashChange & onLoad event.
 const controlRecipes = async function () {
@@ -33,6 +32,8 @@ const controlRecipes = async function () {
     // -> gets recipe field value from model.state
     const { recipe } = model.state;
 
+    // const view = new View();
+    // view.render(recipe);
     // 2) Rendering recipe
     recipeView.render(recipe);
     // renderSpinner(recipeContainer);
@@ -51,14 +52,26 @@ const controlSearchResults = async function () {
     // 2) Load search results
     await model.loadSearchResults(query);
     // 3) Render results
-    resultsView.render(model.state.search.results);
+    resultsView.render(model.getSearchResultsPage());
+    // 4) Render initial pagination buttons
+    paginationView.render(model.state.search);
   } catch (err) {
     console.error(err);
   }
 };
 
+const controlPagination = function (goToPage) {
+  console.log('R');
+  // 1) Render New results
+  resultsView.render(model.getSearchResultsPage(goToPage));
+  // 2) Render New pagination buttons
+  paginationView.render(model.state.search);
+};
+
+// App Start
 const init = function () {
   recipeView.addHandlerRender(controlRecipes);
   searchView.addHandlerSearch(controlSearchResults);
+  paginationView.addHandlerClick(controlPagination);
 };
 init();

@@ -6,9 +6,13 @@ class ResultsView extends View {
   _errorMessage = 'No recipes found for your query! Please try again!';
   _message = '';
 
+  // Here this._data is an Array with x > 0 elements
   _generateMarkup() {
-    console.log(this._data);
-    return this._data.map(el => this._generateMarkupPreview(el)).join('');
+    return this._data
+      .map(el => {
+        return this._generateMarkupPreview(el);
+      })
+      .join('');
   }
 
   _generateMarkupPreview(el) {

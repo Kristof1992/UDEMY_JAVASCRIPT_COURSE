@@ -1,24 +1,31 @@
 import { async } from 'regenerator-runtime';
-import { API_KEY, API_URL } from './config.js';
+import { API_KEY, API_URL, RES_PER_PAGE, DEFAULT_PAGE } from './config.js';
 import { getJSON } from './helpers.js';
 
 // https://forkify-api.herokuapp.com/api/v2/recipes/${id}?key=${API_KEY}
 // https://forkify-api.herokuapp.com/api/v2/recipes?search=pizza&key=<insert your key>
 // https://forkify-api.herokuapp.com/api/v2/recipes?search=pizza&key=${API_KEY}
 
-// Cache?
+/**
+ * Stores the:
+ * currentRecipe Obj {}
+ * search
+ */
 export const state = {
   recipe: {},
   search: {
     query: '',
     results: [],
+    page: 1,
+    resultsPerPage: RES_PER_PAGE,
   },
 };
 
 // Queries data from api and stores it in state.recipe object
-export const loadRecipe = async function (id = '5ed6604591c37cdc054bc90b') {
+export const loadRecipe = async function (id) {
   try {
     const data = await getJSON(`${API_URL}${id}?key=${API_KEY}`);
+    // Processing Obj and storing it.
     const { recipe } = data.data;
     state.recipe = {
       id: recipe.id,
@@ -35,6 +42,7 @@ export const loadRecipe = async function (id = '5ed6604591c37cdc054bc90b') {
   }
 };
 
+// Stores recently entered keyword and list of recipes in results.
 export const loadSearchResults = async function (query) {
   try {
     state.search.query = query;
@@ -50,4 +58,17 @@ export const loadSearchResults = async function (query) {
   } catch (err) {
     throw err;
   }
+};
+
+/**
+ *
+ * @param {*} page - DEFAULT_PAGE = 1 in config
+ * @returns a new [] with a portion of the queried data between
+ * start and end values
+ */
+export const getSearchResultsPage = function (page = DEFAULT_PAGE) {
+  state.search.page = page;
+  const start = (page - 1) * state.search.resultsPerPage; // 0
+  const end = page * state.search.resultsPerPage; // 9
+  return state.search.results.slice(start, end);
 };

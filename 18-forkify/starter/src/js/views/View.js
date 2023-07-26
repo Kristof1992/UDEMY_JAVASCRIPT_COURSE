@@ -11,6 +11,8 @@ export default class View {
    * Inserts newly created HTML to DOM
    */
   render(data) {
+    // Checks if data is falsy OR it is an empty Array
+    // We want an array with x > 0 elements
     if (!data || (Array.isArray(data) && data.length === 0))
       return this.renderError();
     this._data = data;
@@ -18,6 +20,10 @@ export default class View {
     this._clear();
     this._parentElement.insertAdjacentHTML('afterbegin', markup);
   }
+
+  // _generateMarkup() {
+  //   throw new Error('Implement this method!');
+  // }
 
   _clear() {
     this._parentElement.innerHTML = '';
