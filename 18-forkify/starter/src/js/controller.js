@@ -27,6 +27,9 @@ const controlRecipes = async function () {
     if (!id) return;
     recipeView.renderSpinner();
 
+    // 0) Update results view to mark selected search result
+    resultsView.update(model.getSearchResultsPage());
+
     // 1) loading recipe
     await model.loadRecipe(id); // invokes -> loadRecipe(hash)
     // -> gets recipe field value from model.state
@@ -61,7 +64,6 @@ const controlSearchResults = async function () {
 };
 
 const controlPagination = function (goToPage) {
-  console.log('R');
   // 1) Render New results
   resultsView.render(model.getSearchResultsPage(goToPage));
   // 2) Render New pagination buttons
@@ -72,7 +74,7 @@ const controlServings = function (newServings) {
   // Update recipe servings (in state)
   model.updateServings(newServings);
   // Update the recipe view
-  recipeView.render(model.state.recipe);
+  recipeView.update(model.state.recipe);
 };
 
 // App Start
