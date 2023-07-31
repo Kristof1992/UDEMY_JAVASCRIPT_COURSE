@@ -29,10 +29,10 @@ const controlRecipes = async function () {
     if (!id) return;
     recipeView.renderSpinner();
 
+    bookmarksView.update(model.state.bookmarks);
     // 0) Update results view to mark selected search result
     resultsView.update(model.getSearchResultsPage()); // convoluted
     // Updates Bookmarst tab to mark currently selected recipe
-    bookmarksView.update(model.state.bookmarks);
 
     // 1) loading recipe
     await model.loadRecipe(id); // invokes -> loadRecipe(hash)
@@ -47,6 +47,7 @@ const controlRecipes = async function () {
     // `https://forkify-api.herokuapp.com/api/v2/recipes/5ed6604591c37cdc054bcc40?key=${API_KEY}`
   } catch (err) {
     recipeView.renderError();
+    console.error(err);
   }
 };
 
@@ -94,9 +95,16 @@ const controlAddBookmark = function () {
   bookmarksView.render(model.state.bookmarks);
 };
 
+// Adds onload event to refresh bookmarks
+const controlBookmarks = function () {
+  model.loadBookmarksCache();
+  bookmarksView.render(model.state.bookmarks);
+};
+
 // App Start
 const init = function () {
   // window.location.hash = '';
+  bookmarksView.addHandlerRender(controlBookmarks);
   recipeView.addHandlerRender(controlRecipes);
   recipeView.addHandlerUpdateServings(controlServings);
   recipeView.addHandlerAddBookmark(controlAddBookmark);
@@ -104,3 +112,10 @@ const init = function () {
   paginationView.addHandlerClick(controlPagination);
 };
 init();
+
+// For Debugging
+const clearBookmarks = function () {
+  localStorage.clear('bookmarks');
+  model.state.bookmarks = [];
+};
+clearBookmarks();

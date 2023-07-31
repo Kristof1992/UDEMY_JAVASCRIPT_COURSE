@@ -39,6 +39,7 @@ export default class View {
     // console.log('----------');
     // console.log(newElements);
 
+    console.log(this._data,newElements.length, curElements.length);
     newElements.forEach((newEl, i) => {
       const curEl = curElements[i];
       // Update changed text
