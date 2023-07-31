@@ -30,14 +30,6 @@ class RecipeView extends View {
     });
   }
 
-  addHandlerAddBookmark(handler) {
-    this._parentElement.addEventListener('click', function (e) {
-      const btn = e.target.closest('.btn--bookmark');
-      if (!btn) return;
-      handler();
-    });
-  }
-
   // Here this._data is an Object
   // prettier-ignore
   _generateMarkup() {
@@ -83,7 +75,6 @@ class RecipeView extends View {
             
           </div>
           <button class="btn--round btn--bookmark">
-          <button class="btn--round btn--bookmark">
             <svg class="">
               <use href="${icons}#icon-bookmark${this._data.bookmarked ? '-fill' : ''}"></use>
             </svg>
@@ -118,9 +109,6 @@ class RecipeView extends View {
           </a>
         </div>
     `;
-    // <svg>
-    //           <use href="${icons}#icon-user"></use>
-    //         </svg>
   }
 
   // 3rd party API used here to process Recipe ingredients

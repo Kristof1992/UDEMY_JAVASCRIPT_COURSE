@@ -68,8 +68,6 @@ export const loadSearchResults = async function (query) {
   }
 };
 
-console.log('Merge Commit');
-
 /**
  *
  * @param {*} page - DEFAULT_PAGE = 1 in config

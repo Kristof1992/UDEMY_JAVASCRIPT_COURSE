@@ -10,13 +10,17 @@ export default class View {
    * Clears Parent element so newly inserted HTML will have its own space.
    * Inserts newly created HTML to DOM
    */
-  render(data) {
+  render(data, render = true) {
     // Checks if data is falsy OR it is an empty Array
     // We want an array with x > 0 elements
     if (!data || (Array.isArray(data) && data.length === 0))
       return this.renderError();
+
     this._data = data;
     const markup = this._generateMarkup();
+    if (!render) return markup; // Return the markup, but don't insert it yet.
+
+    // Inserting markup
     this._clear();
     this._parentElement.insertAdjacentHTML('afterbegin', markup);
   }

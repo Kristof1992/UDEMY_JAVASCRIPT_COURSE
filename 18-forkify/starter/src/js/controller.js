@@ -8,6 +8,7 @@ import recipeView from './views/recipeView'; // View imported here
 import searchView from './views/searchVIew'; // View imported here
 import resultsView from './views/resultsView';
 import paginationView from './views/paginationView';
+import bookmarksView from './views/bookmarksView';
 import { async } from 'regenerator-runtime';
 
 // if (module.hot) {
@@ -19,7 +20,7 @@ import { async } from 'regenerator-runtime';
 // https://forkify-api.herokuapp.com/v2
 
 // Triggers on hashChange & onLoad event.
-const controlRecipes = async function (e) {
+const controlRecipes = async function () {
   // console.log(e);
   try {
     // Gets the hashcode whenever it loads the recipe
@@ -30,6 +31,8 @@ const controlRecipes = async function (e) {
 
     // 0) Update results view to mark selected search result
     resultsView.update(model.getSearchResultsPage()); // convoluted
+    // Updates Bookmarst tab to mark currently selected recipe
+    bookmarksView.update(model.state.bookmarks);
 
     // 1) loading recipe
     await model.loadRecipe(id); // invokes -> loadRecipe(hash)
@@ -79,14 +82,16 @@ const controlServings = function (newServings) {
 };
 
 const controlAddBookmark = function () {
+  // Add remove bookmark
   if (!model.state.recipe.bookmarked) {
     model.addBookmark(model.state.recipe);
   } else {
     model.deleteBookmark(model.state.recipe.id);
   }
-
-  console.log(model.state.recipe);
+  //Update recipeView
   recipeView.update(model.state.recipe);
+  // Render bookmarks
+  bookmarksView.render(model.state.bookmarks);
 };
 
 // App Start
@@ -97,6 +102,5 @@ const init = function () {
   recipeView.addHandlerAddBookmark(controlAddBookmark);
   searchView.addHandlerSearch(controlSearchResults);
   paginationView.addHandlerClick(controlPagination);
-  recipeView.addHandlerAddBookmark(controlAddBookmark);
 };
 init();
