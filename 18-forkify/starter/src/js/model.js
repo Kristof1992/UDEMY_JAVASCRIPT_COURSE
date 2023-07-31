@@ -10,6 +10,7 @@ import { getJSON } from './helpers.js';
  * Stores the:
  * currentRecipe Obj {}
  * search
+ * recipe object will have a dynamic  bookmark field
  */
 export const state = {
   recipe: {},
@@ -19,24 +20,34 @@ export const state = {
     page: 1,
     resultsPerPage: RES_PER_PAGE,
   },
+  bookmarks: [],
 };
 
 // Queries data from api and stores it in state.recipe object
+// Triggers on onLoad event and hashchange
 export const loadRecipe = async function (id) {
   try {
     const data = await getJSON(`${API_URL}${id}?key=${API_KEY}`);
     // Processing Obj and storing it.
     const { recipe } = data.data;
-    state.recipe = {
-      id: recipe.id,
-      title: recipe.title,
-      publisher: recipe.publisher,
-      sourceUrl: recipe.source_url,
-      image: recipe.image_url,
-      servings: recipe.servings,
-      cookingTime: recipe.cooking_time,
-      ingredients: recipe.ingredients,
-    };
+    // Iterating through cache if recipe is already bookmarked
+    const localRecipe = state.bookmarks.find(el => el.id === recipe.id);
+    // Loads local recipe if not loads fresh API data
+    if (localRecipe) {
+      state.recipe = localRecipe;
+    } else {
+      state.recipe = {
+        id: recipe.id,
+        title: recipe.title,
+        publisher: recipe.publisher,
+        sourceUrl: recipe.source_url,
+        image: recipe.image_url,
+        servings: recipe.servings,
+        cookingTime: recipe.cooking_time,
+        ingredients: recipe.ingredients,
+      };
+    }
+    // Checks whether one of the bookmarks id is the same as the loaded id???
   } catch (err) {
     throw err;
   }
@@ -55,6 +66,7 @@ export const loadSearchResults = async function (query) {
         title: rec.title,
       };
     });
+    state.search.page = 1;
   } catch (err) {
     throw err;
   }
@@ -79,4 +91,23 @@ export const updateServings = function (newServings) {
     // newQt = oldQt * newServings / oldServings // 2 * 8 / 4 = 4
   });
   state.recipe.servings = newServings;
+};
+
+// recipe arg
+export const addBookmark = function () {
+  const curRecipe = state.recipe;
+  console.log('addBookmark', curRecipe);
+  if (!curRecipe) return;
+
+  if (state.bookmarks.includes(curRecipe)) {
+    console.log('To delete');
+    const index = state.bookmarks.indexOf(curRecipe);
+    state.bookmarks[index].bookmark = false;
+    state.bookmarks.splice(index, 1);
+  } else {
+    curRecipe.bookmark = true;
+    state.bookmarks.push(curRecipe);
+  }
+
+  // if (recipe.id === state.recipe.id) state.recipe.bookmark = true;
 };

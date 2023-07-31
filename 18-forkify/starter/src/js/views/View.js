@@ -23,12 +23,15 @@ export default class View {
 
   // prettier-ignore
   update(data) {
-    this._data = data;
-    const newMarkup = this._generateMarkup();
-
-    const newDOM = document.createRange().createContextualFragment(newMarkup);
+    this._data = data; // model.state.search
+    const newMarkup = this._generateMarkup(); // Markup String
+    const newDOM = document.createRange().createContextualFragment(newMarkup); // new DOM from Markup
     const newElements = Array.from(newDOM.querySelectorAll('*'));
     const curElements = Array.from(this._parentElement.querySelectorAll('*'));
+
+    // console.log(curElements);
+    // console.log('----------');
+    // console.log(newElements);
 
     newElements.forEach((newEl, i) => {
       const curEl = curElements[i];
