@@ -10,6 +10,7 @@ import { getJSON } from './helpers.js';
  * Stores the:
  * currentRecipe Obj {}
  * search
+ * recipe object will have a dynamic  bookmark field
  */
 export const state = {
   recipe: {},
@@ -23,6 +24,7 @@ export const state = {
 };
 
 // Queries data from api and stores it in state.recipe object
+// Triggers on onLoad event and hashchange
 export const loadRecipe = async function (id) {
   try {
     const data = await getJSON(`${API_URL}${id}?key=${API_KEY}`);

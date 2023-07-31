@@ -19,7 +19,8 @@ import { async } from 'regenerator-runtime';
 // https://forkify-api.herokuapp.com/v2
 
 // Triggers on hashChange & onLoad event.
-const controlRecipes = async function () {
+const controlRecipes = async function (e) {
+  // console.log(e);
   try {
     // Gets the hashcode whenever it loads the recipe
     // Right now it loads it from the hardcoded link
@@ -28,7 +29,7 @@ const controlRecipes = async function () {
     recipeView.renderSpinner();
 
     // 0) Update results view to mark selected search result
-    resultsView.update(model.getSearchResultsPage());
+    resultsView.update(model.getSearchResultsPage()); // convoluted
 
     // 1) loading recipe
     await model.loadRecipe(id); // invokes -> loadRecipe(hash)
@@ -96,5 +97,6 @@ const init = function () {
   recipeView.addHandlerAddBookmark(controlAddBookmark);
   searchView.addHandlerSearch(controlSearchResults);
   paginationView.addHandlerClick(controlPagination);
+  recipeView.addHandlerAddBookmark(controlAddBookmark);
 };
 init();
