@@ -21,6 +21,8 @@ export default class View {
     this._parentElement.insertAdjacentHTML('afterbegin', markup);
   }
 
+  // Receives new DATA which is updated for the View object.
+  // Once differences found elements get updated HTML text and attributes.
   // prettier-ignore
   update(data) {
     this._data = data;
