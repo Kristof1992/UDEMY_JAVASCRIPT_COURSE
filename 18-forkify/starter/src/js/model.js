@@ -109,7 +109,6 @@ export const deleteBookmark = function (id) {
 };
 
 export const loadBookmarksCache = function () {
-  console.log('model', 'init');
   const storage = localStorage.getItem('bookmarks');
   if (storage) state.bookmarks = JSON.parse(storage);
 };

@@ -9,7 +9,7 @@ import searchView from './views/searchVIew'; // View imported here
 import resultsView from './views/resultsView';
 import paginationView from './views/paginationView';
 import bookmarksView from './views/bookmarksView';
-import { async } from 'regenerator-runtime';
+import addRecipeView from './views/addRecipeView';
 
 // if (module.hot) {
 //   module.hot.accept();
@@ -101,6 +101,12 @@ const controlBookmarks = function () {
   bookmarksView.render(model.state.bookmarks);
 };
 
+const controlAddRecipe = function (newRecipe) {
+  console.log(newRecipe);
+
+  // Upload the new recipe data
+};
+
 // App Start
 const init = function () {
   // window.location.hash = '';
@@ -110,6 +116,7 @@ const init = function () {
   recipeView.addHandlerAddBookmark(controlAddBookmark);
   searchView.addHandlerSearch(controlSearchResults);
   paginationView.addHandlerClick(controlPagination);
+  addRecipeView.addHandlerUpload(controlAddRecipe);
 };
 init();
 
