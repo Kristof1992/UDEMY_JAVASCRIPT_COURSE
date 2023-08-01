@@ -98,10 +98,12 @@ export default class View {
           <div class="message">
             <div>
               <svg>
-                <use href="${icon}#icon-smile"></use>
+                <use href="${icons}#icon-smile"></use>
               </svg>
             </div>
             <p>${message}</p>
       `;
+    this._clear();
+    this._parentElement.insertAdjacentHTML('beforeend', markup);
   }
 }

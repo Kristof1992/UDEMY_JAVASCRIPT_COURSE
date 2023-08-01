@@ -4,12 +4,14 @@ import 'core-js/stable'; // polyfilling everything else
 import 'regenerator-runtime/runtime'; // polyfilling async/await
 
 import * as model from '../js/model'; // Model imported here
+import { MODAL_CLOSE_SEC } from './config';
 import recipeView from './views/recipeView'; // View imported here
 import searchView from './views/searchVIew'; // View imported here
 import resultsView from './views/resultsView';
 import paginationView from './views/paginationView';
 import bookmarksView from './views/bookmarksView';
 import addRecipeView from './views/addRecipeView';
+import { async } from 'regenerator-runtime';
 
 // if (module.hot) {
 //   module.hot.accept();
@@ -43,6 +45,7 @@ const controlRecipes = async function () {
     // view.render(recipe);
     // 2) Rendering recipe
     recipeView.render(recipe);
+    console.log(recipe);
     // renderSpinner(recipeContainer);
     // `https://forkify-api.herokuapp.com/api/v2/recipes/5ed6604591c37cdc054bcc40?key=${API_KEY}`
   } catch (err) {
@@ -101,10 +104,27 @@ const controlBookmarks = function () {
   bookmarksView.render(model.state.bookmarks);
 };
 
-const controlAddRecipe = function (newRecipe) {
-  console.log(newRecipe);
+// Uploads new recipe data
+const controlAddRecipe = async function (newRecipe) {
+  try {
+    addRecipeView.renderSpinner();
+    await model.uploadRecipe(newRecipe);
+    console.log(model.state.recipe);
 
-  // Upload the new recipe data
+    // Render recipe
+    recipeView.render(model.state.recipe);
+
+    // Success message
+    addRecipeView.renderMessage();
+
+    // Close form window
+    setTimeout(function () {
+      addRecipeView.toggleWindow();
+    }, MODAL_CLOSE_SEC * 1000);
+  } catch (err) {
+    console.error('💥', err);
+    addRecipeView.renderError(err.message);
+  }
 };
 
 // App Start
@@ -119,10 +139,3 @@ const init = function () {
   addRecipeView.addHandlerUpload(controlAddRecipe);
 };
 init();
-
-// For Debugging
-const clearBookmarks = function () {
-  localStorage.clear('bookmarks');
-  model.state.bookmarks = [];
-};
-clearBookmarks();
