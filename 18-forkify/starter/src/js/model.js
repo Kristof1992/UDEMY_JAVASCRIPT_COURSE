@@ -1,6 +1,6 @@
 import { async } from 'regenerator-runtime';
 import { API_KEY, API_URL, RES_PER_PAGE, DEFAULT_PAGE } from './config.js';
-import { getJSON, sendJSON, generateApiPostQuery } from './helpers.js';
+import { AJAX, generateApiPostQuery } from './helpers.js';
 
 // https://forkify-api.herokuapp.com/api/v2/recipes/${id}?key=${API_KEY}
 // https://forkify-api.herokuapp.com/api/v2/recipes?search=pizza&key=<insert your key>
@@ -42,22 +42,9 @@ const createRecipeObject = function (data) {
 // Triggers on onLoad event and hashchange
 export const loadRecipe = async function (id) {
   try {
-    const data = await getJSON(`${API_URL}${id}`);
-
+    const data = await AJAX(`${API_URL}${id}?key=${API_KEY}`);
     state.recipe = createRecipeObject(data);
 
-    // Processing Obj and storing it.
-    const { recipe } = data.data;
-    state.recipe = {
-      id: recipe.id,
-      title: recipe.title,
-      publisher: recipe.publisher,
-      sourceUrl: recipe.source_url,
-      image: recipe.image_url,
-      servings: recipe.servings,
-      cookingTime: recipe.cooking_time,
-      ingredients: recipe.ingredients,
-    };
     if (state.bookmarks.some(bookmark => bookmark.id === id))
       state.recipe.bookmarked = true;
     else state.recipe.bookmarked = false;
@@ -70,13 +57,15 @@ export const loadRecipe = async function (id) {
 export const loadSearchResults = async function (query) {
   try {
     state.search.query = query;
-    const data = await getJSON(`${API_URL}?search=${query}`);
+    const data = await AJAX(`${API_URL}?search=${query}&key=${API_KEY}`);
+    console.log(data);
     state.search.results = data.data.recipes.map(rec => {
       return {
         id: rec.id,
         image: rec.image_url,
         publisher: rec.publisher,
         title: rec.title,
+        ...(rec.key && { key: rec.key }),
       };
     });
     // Resetting page
@@ -144,7 +133,8 @@ export const uploadRecipe = async function (newRecipe) {
     const ingredients = Object.entries(newRecipe)
     .filter(entry => entry[0].startsWith('ingredient') && entry[1] !== '')
     .map(ing => {
-      const ingArr = ing[1].replaceAll(' ', '').split(',');
+      // const ingArr = ing[1].replaceAll(' ', '').split(',');
+      const ingArr = ing[1].split(',').map(el=> el.trim());
       if(ingArr.length !== 3) throw new Error('Wrong ingredient format! Please use the correct format :)');
       const [quantity, unit, description] = ingArr;
       return { quantity: quantity ? +quantity : null, unit, description };
@@ -160,8 +150,9 @@ export const uploadRecipe = async function (newRecipe) {
       ingredients,
     }
 
-  const data = await sendJSON(generateApiPostQuery(recipe.title), recipe);
+  const data = await AJAX(generateApiPostQuery(recipe.title), recipe);
   state.recipe = createRecipeObject(data);
+  console.log(state.recipe);
   addBookmark(state.recipe);
   console.log(data);
   } catch(err) {

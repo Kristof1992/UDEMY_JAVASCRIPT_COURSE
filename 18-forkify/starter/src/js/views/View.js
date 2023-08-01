@@ -5,6 +5,8 @@ export default class View {
 
   /**
    * @param {*} data: recipeObj for rendering
+   * @param {*} render: default true, if it's true clears html and inserts
+   * new markup otherwise just saves the data and returns the markup string
    * Saves recipe to RecipeViewObj
    * Dynamically generates RecipeView [HTML]
    * Clears Parent element so newly inserted HTML will have its own space.

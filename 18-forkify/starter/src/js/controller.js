@@ -45,7 +45,6 @@ const controlRecipes = async function () {
     // view.render(recipe);
     // 2) Rendering recipe
     recipeView.render(recipe);
-    console.log(recipe);
     // renderSpinner(recipeContainer);
     // `https://forkify-api.herokuapp.com/api/v2/recipes/5ed6604591c37cdc054bcc40?key=${API_KEY}`
   } catch (err) {
@@ -108,14 +107,21 @@ const controlBookmarks = function () {
 const controlAddRecipe = async function (newRecipe) {
   try {
     addRecipeView.renderSpinner();
+    // Upload the new recipe
     await model.uploadRecipe(newRecipe);
-    console.log(model.state.recipe);
 
     // Render recipe
     recipeView.render(model.state.recipe);
 
     // Success message
     addRecipeView.renderMessage();
+
+    // Render bookmark view
+    bookmarksView.render(model.state.bookmarks);
+
+    // Change id in URL
+    window.history.pushState(null, '', `#${model.state.recipe.id}`);
+    // window.history.back()
 
     // Close form window
     setTimeout(function () {
