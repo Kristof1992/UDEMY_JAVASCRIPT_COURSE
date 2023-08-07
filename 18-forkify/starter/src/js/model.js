@@ -152,9 +152,7 @@ export const uploadRecipe = async function (newRecipe) {
 
   const data = await AJAX(generateApiPostQuery(recipe.title), recipe);
   state.recipe = createRecipeObject(data);
-  console.log(state.recipe);
   addBookmark(state.recipe);
-  console.log(data);
   } catch(err) {
     throw err;
   }

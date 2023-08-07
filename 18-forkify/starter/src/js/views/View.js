@@ -4,12 +4,14 @@ export default class View {
   _data;
 
   /**
-   * @param {*} data: recipeObj for rendering
-   * @param {*} render: default true, if it's true clears html and inserts
-   * new markup otherwise just saves the data and returns the markup string
+   * @param {Object | Object[]} data Data to be rendered
+   * @param {boolean} [render=true] If false, create markup string instead of rendering to the DOM
+   * @returns {undefined | string} A markup string is returned if render=false
+   * @this {Object} View instance
+   * @author X Y
+   * @todo Finish implementation
    * Saves recipe to RecipeViewObj
-   * Dynamically generates RecipeView [HTML]
-   * Clears Parent element so newly inserted HTML will have its own space.
+   * Dynamically generates RecipeView HTML
    * Inserts newly created HTML to DOM
    */
   render(data, render = true) {
@@ -31,7 +33,7 @@ export default class View {
   // Once differences found elements get updated HTML text and attributes.
   // prettier-ignore
   update(data) {
-    this._data = data; // model.state.search
+    this._data = data;
     const newMarkup = this._generateMarkup(); // Markup String
     const newDOM = document.createRange().createContextualFragment(newMarkup); // new DOM from Markup
     const newElements = Array.from(newDOM.querySelectorAll('*'));

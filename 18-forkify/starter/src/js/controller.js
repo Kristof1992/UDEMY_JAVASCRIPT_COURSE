@@ -114,6 +114,9 @@ const controlAddRecipe = async function (newRecipe) {
     recipeView.render(model.state.recipe);
 
     // Success message
+    /**
+     * @todo buggy modal window w success message
+     */
     addRecipeView.renderMessage();
 
     // Render bookmark view
